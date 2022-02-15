@@ -11,13 +11,14 @@ function rainbowColor(){
 	return `rgba(${CLR_R}, ${CLR_G}, ${CLR_B})`
 }
 
-function changeColor(e){
-	
+function changeColor(){
+	// color selector treba da ide ovde
+	// dodati const obavezno za boje
 }
 
 function setupGrid(){
 	if(!(stateOfGrid)){
-		stateOfGrid = true //SO USER CAN'T MAKE MORE THAN 1 GRID
+		stateOfGrid = true //USER CAN'T MAKE MORE THAN 1 GRID
 
 		for(let i = 0; i < 16; i++){//CREATE ROW
 			const rowGrid = document.createElement('div')
@@ -29,10 +30,11 @@ function setupGrid(){
 				const gridEl = document.createElement('div')
 				//ADDING EVENT LISTENER TO EACH ELEMENT IN THE 16X16 GRID
 				gridEl.addEventListener('click', (element)=>{
-					console.log(element.target.className)
+					element.target.style.backgroundColor = rainbowColor()
+					// console.log(element.target.className)
 				})
 
-				gridEl.setAttribute('style', `background-color: ${rainbowColor()}`)
+				// gridEl.setAttribute('style', `background-color: ${rainbowColor()}`)
 				gridEl.style.border = '1px solid black'
 				gridEl.style.width = '25px'
 				gridEl.style.height = '25px'
