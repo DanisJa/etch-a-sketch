@@ -1,5 +1,9 @@
 const grid = document.querySelector('.grid')
 const setupBtn = document.querySelector('.setupBtn')
+const colorPicker = document.querySelector('#colorpicker')
+const rainbowColorBtn = document.querySelector('.rainbowClr')
+
+let CURRENT_COLOR = 'black';
 let stateOfGrid = false
 let classNamer = 0 //VARIABLE FOR NAMING DIVS INSIDE THE CONTAINER
 
@@ -11,10 +15,9 @@ function rainbowColor(){
 	return `rgba(${CLR_R}, ${CLR_G}, ${CLR_B})`
 }
 
-function changeColor(){
-	// color selector treba da ide ovde
-	// dodati const obavezno za boje
-}
+colorPicker.addEventListener('input', (e) => {
+	CURRENT_COLOR = e.target.value;
+})
 
 function setupGrid(){
 	if(!(stateOfGrid)){
@@ -30,7 +33,12 @@ function setupGrid(){
 				const gridEl = document.createElement('div')
 				//ADDING EVENT LISTENER TO EACH ELEMENT IN THE 16X16 GRID
 				gridEl.addEventListener('click', (element)=>{
-					element.target.style.backgroundColor = rainbowColor()
+					if(CURRENT_COLOR === 'rainbow'){
+						element.target.style.backgroundColor = rainbowColor()
+					}
+					else{
+						element.target.style.backgroundColor = CURRENT_COLOR;
+					}
 					// console.log(element.target.className)
 				})
 
@@ -54,3 +62,7 @@ function setupGrid(){
 
 setupBtn.addEventListener('click', setupGrid)
 setupBtn.addEventListener('click', ()=>{grid.style.display='inline-block'}) //SHOW MAIN GRID
+
+rainbowColorBtn.addEventListener('click', ()=>{CURRENT_COLOR = 'rainbow'})
+
+
