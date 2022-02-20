@@ -2,10 +2,13 @@ const grid = document.querySelector('.grid')
 const setupBtn = document.querySelector('.setupBtn')
 const colorPicker = document.querySelector('#colorpicker')
 const rainbowColorBtn = document.querySelector('.rainbowClr')
+const slider = document.querySelector('#gridRange')
+const sliderParagraph = document.querySelector('#gridRangeSize')
+let gridSize = slider.value
 
 let CURRENT_COLOR = 'black';
-let stateOfGrid = false
-let classNamer = 0 //VARIABLE FOR NAMING DIVS INSIDE THE CONTAINER
+let stateOfGrid = false//user can't make more than one grid
+let toggleDraw = false//click to draw
 
 function rainbowColor(){
 	const CLR_R = Math.floor(Math.random()*255)
@@ -19,41 +22,57 @@ colorPicker.addEventListener('input', (e) => {
 	CURRENT_COLOR = e.target.value;
 })
 
-function setupGrid(){
-	if(!(stateOfGrid)){
-		stateOfGrid = true //USER CAN'T MAKE MORE THAN 1 GRID
+const toggleClick = ()=>{
+	if(toggleDraw){
+		toggleDraw=false
+	}
+	else{
+		toggleDraw=true
+	}
+	console.log(toggleDraw)
+}
 
-		for(let i = 0; i < 16; i++){//CREATE ROW
-			const rowGrid = document.createElement('div')
-			rowGrid.style.width = '100%'
-			rowGrid.style.height = '25px'
-			rowGrid.style.display = 'flex'
-			
-			for(let j = 0; j < 16; j++){//CREATE BLOCKS INSIDE THE ROW
+function removeCells() {
+	while(grid.firstChild) {
+	  grid.removeChild(grid.firstChild);
+	}
+  }
+
+const setupGrid = ()=>{
+	removeCells()
+	gridSize = slider.value
+	grid.setAttribute('style', `grid-template-columns: repeat(${gridSize}); grid-template-rows: repeat(${gridSize});`)
+
+	console.log('creating a grid of '+gridSize+'x'+gridSize)
+	if(!(stateOfGrid)){//this was added before, but gonna leave it here just to admire how retarded I am later on
+		// stateOfGrid = true //USER CAN'T MAKE MORE THAN 1 GRID
+		for(let i = 0; i < gridSize * gridSize; i++){
 				const gridEl = document.createElement('div')
+
 				//ADDING EVENT LISTENER TO EACH ELEMENT IN THE 16X16 GRID
-				gridEl.addEventListener('click', (element)=>{
-					if(CURRENT_COLOR === 'rainbow'){
+				gridEl.addEventListener('click', toggleClick)
+				gridEl.addEventListener('mouseover', (element)=>{
+					console.log(element.target.className + 'drawing')
+					if(CURRENT_COLOR === 'rainbow' && toggleDraw === true){
 						element.target.style.backgroundColor = rainbowColor()
 					}
-					else{
+					else if(toggleDraw === true){
 						element.target.style.backgroundColor = CURRENT_COLOR;
 					}
 					// console.log(element.target.className)
 				})
-
+				
 				// gridEl.setAttribute('style', `background-color: ${rainbowColor()}`)
 				gridEl.style.border = '1px solid black'
-				gridEl.style.width = '25px'
-				gridEl.style.height = '25px'
-				gridEl.className = 'colDiv' + classNamer++
-
-
-				rowGrid.appendChild(gridEl)
-			}
+				// gridEl.style.width = '25px'
+				// gridEl.style.height = '25px'
+				
 			
-			grid.appendChild(rowGrid)
+			grid.appendChild(gridEl)
 		}
+		grid.style.gridTemplateColumns = (`repeat(${gridSize}, 2fr`);
+		grid.style.gridTemplateRows= (`repeat(${gridSize}, 2fr`);
+		grid.style.gridGap = '0px'
 	}
 	else{
 		alert(`can't make more than 1 grid man`)
@@ -61,8 +80,16 @@ function setupGrid(){
 }
 
 setupBtn.addEventListener('click', setupGrid)
-setupBtn.addEventListener('click', ()=>{grid.style.display='inline-block'}) //SHOW MAIN GRID
+
+//SHOW MAIN GRID
+setupBtn.addEventListener('click', ()=>{
+	grid.style.display='grid'
+}) 
 
 rainbowColorBtn.addEventListener('click', ()=>{CURRENT_COLOR = 'rainbow'})
 
+slider.addEventListener('change', ()=>{
+	sliderParagraph.textContent = 'size: ' + slider.value + 'x' + slider.value
+	sliderParagraph.style.color = 'white'
+})
 
