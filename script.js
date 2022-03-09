@@ -47,7 +47,7 @@ const setupGrid = () => {
 			}
 		})
 
-		gridEl.style.border = '1px solid black'
+// 		gridEl.style.border = '1px solid black'
 		
 		grid.appendChild(gridEl)
 	}
